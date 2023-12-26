@@ -18,14 +18,14 @@ public class KingdomService {
     @Autowired
     private WarriorRepository warriorRepository;
 
-    @Cacheable("getWarriors")
+    @Cacheable("getWarriors") // 武将の全件検索結果をキャッシュに登録する
     public List<Warrior> getAllWarriors() {
         List<Warrior> allWarriors = new ArrayList<>();
         warriorRepository.findAll().forEach(allWarriors::add);
         return allWarriors;
     }
 
-    @Cacheable(value = "getWarrior", key = "#p0")
+    @Cacheable(value = "getWarrior", key = "#p0") // キー値ごとにキャッシュを作成する
     public Optional<Warrior> getWarrior(String name) {
         return warriorRepository.findWarriorByName(name);
     }
@@ -42,8 +42,6 @@ public class KingdomService {
     public void updateWarrior(Warrior warrior, Long id) {
         if (warriorRepository.findById(id).isPresent()) {
 //            warriorRepository.deleteById(warriorRepository.findWarriorByName(name).get().getId());
-            warrior.setId(id);
-            warrior.setName("aaa");
             warriorRepository.save(warrior);
         }
     }
